@@ -1,0 +1,16 @@
+language: go
+
+sudo: false
+
+go:
+  - 1.6.2
+  #- tip See https://github.com/golang/lint/issues/207
+
+before_install:
+  - go get -v github.com/golang/lint/golint
+
+script:
+  - go test -v -cover
+  - gofmt -d .
+  - go tool vet .
+  - golint .
