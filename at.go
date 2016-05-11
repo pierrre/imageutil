@@ -259,10 +259,10 @@ func newAtFuncCMYK(p *image.CMYK) AtFunc {
 	return func(x, y int) (r, g, b, a uint32) {
 		i := (y-p.Rect.Min.Y)*p.Stride + (x-p.Rect.Min.X)*4
 		s := p.Pix[i : i+4]
-		w := uint32(0xffff - uint32(s[3])*0x101)
-		r = uint32(0xffff-uint32(s[0])*0x101) * w / 0xffff
-		g = uint32(0xffff-uint32(s[1])*0x101) * w / 0xffff
-		b = uint32(0xffff-uint32(s[2])*0x101) * w / 0xffff
+		w := 0xffff - uint32(s[3])*0x101
+		r = (0xffff - uint32(s[0])*0x101) * w / 0xffff
+		g = (0xffff - uint32(s[1])*0x101) * w / 0xffff
+		b = (0xffff - uint32(s[2])*0x101) * w / 0xffff
 		a = 0xffff
 		return
 	}

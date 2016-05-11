@@ -175,9 +175,9 @@ func sqDiff(x, y uint32) uint32 {
 
 func newSetFuncCMYK(p *image.CMYK) SetFunc {
 	return func(x, y int, r, g, b, a uint32) {
-		rr := uint32(r >> 8)
-		gg := uint32(g >> 8)
-		bb := uint32(b >> 8)
+		rr := r >> 8
+		gg := g >> 8
+		bb := b >> 8
 		w := rr
 		if w < gg {
 			w = gg
