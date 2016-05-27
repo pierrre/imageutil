@@ -7,15 +7,13 @@ go:
   - tip
 
 before_install:
-  - go get -v github.com/golang/lint/golint
+  - go get -v github.com/alecthomas/gometalinter && gometalinter --install
 
 install: go get -v -d -t ./...
 
 script:
   - go test -v -cover -coverprofile=coverage.txt -covermode=atomic
-  - gofmt -d .
-  - go tool vet .
-  - golint .
+  - gometalinter -E gofmt -D gotype -D vetshadow -D dupl -D goconst -D interfacer -D gocyclo --tests --deadline=10m ./...
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
