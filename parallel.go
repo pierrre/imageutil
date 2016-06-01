@@ -1,6 +1,7 @@
 package imageutil
 
 import (
+	"context"
 	"image"
 	"runtime"
 	"sync"
@@ -11,7 +12,7 @@ import (
 // It splits the image horizontally in GOMAXPROCS parts and runs GOMAXPROCS workers.
 //
 // It should be used if all the pixels of the image have the same process cost.
-func Parallel1D(r image.Rectangle, f func(image.Rectangle)) {
+func Parallel1D(ctx context.Context, r image.Rectangle, f func(context.Context, image.Rectangle)) {
 	p := runtime.GOMAXPROCS(0)
 	wg := new(sync.WaitGroup)
 	for y := 0; y < p; y++ {
@@ -24,7 +25,7 @@ func Parallel1D(r image.Rectangle, f func(image.Rectangle)) {
 		if !rr.Empty() {
 			wg.Add(1)
 			go func(rr image.Rectangle) {
-				f(rr)
+				f(ctx, rr)
 				wg.Done()
 			}(rr)
 		}
@@ -38,7 +39,7 @@ func Parallel1D(r image.Rectangle, f func(image.Rectangle)) {
 // and runs GOMAXPROCS workers.
 //
 // It should be used if all the pixels of the image don't have the same process cost.
-func Parallel2D(r image.Rectangle, f func(image.Rectangle)) {
+func Parallel2D(ctx context.Context, r image.Rectangle, f func(context.Context, image.Rectangle)) {
 	p := runtime.GOMAXPROCS(0)
 	rc := make(chan image.Rectangle)
 	wg := new(sync.WaitGroup)
@@ -46,7 +47,7 @@ func Parallel2D(r image.Rectangle, f func(image.Rectangle)) {
 	for i := 0; i < p; i++ {
 		go func() {
 			for rr := range rc {
-				f(rr)
+				f(ctx, rr)
 			}
 			wg.Done()
 		}()
@@ -59,11 +60,17 @@ func Parallel2D(r image.Rectangle, f func(image.Rectangle)) {
 				r.Min.X+(r.Dx()*(x+1)/p),
 				r.Min.Y+(r.Dy()*(y+1)/p),
 			)
-			if !rr.Empty() {
-				rc <- rr
+			if rr.Empty() {
+				continue
+			}
+			select {
+			case rc <- rr:
+			case <-ctx.Done():
+				goto END
 			}
 		}
 	}
+END:
 	close(rc)
 	wg.Wait()
 }
