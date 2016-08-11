@@ -3,17 +3,17 @@ language: go
 sudo: false
 
 go:
-  - 1.6.2
+  - 1.6.3
   - tip
 
-before_install:
-  - go get -v github.com/alecthomas/gometalinter && gometalinter --install
-
-install: go get -v -d -t ./...
+install: go get -v -d -t
 
 script:
   - go test -v -cover -coverprofile=coverage.txt -covermode=atomic
-  - gometalinter -E gofmt -D gotype -D vetshadow -D dupl -D goconst -D interfacer -D gocyclo --tests --deadline=10m ./...
+  - >
+    go get -v github.com/alecthomas/gometalinter &&
+    gometalinter --install &&
+    gometalinter -E gofmt -D gotype -D vetshadow -D dupl -D goconst -D interfacer -D gocyclo -D gas --tests --deadline=10m
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
