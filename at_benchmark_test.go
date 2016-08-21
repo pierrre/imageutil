@@ -180,6 +180,33 @@ func BenchmarkNewAtFunc(b *testing.B) {
 			},
 		},
 		{
+			"NYCbCrAOpaque",
+			func(r image.Rectangle) image.Image {
+				p := image.NewNYCbCrA(r, image.YCbCrSubsampleRatio444)
+				set := newSimpleSetFunc(p)
+				set(r.Min.X, r.Min.Y, color.NRGBA64{0xffff, 0xffff, 0xffff, 0xffff})
+				return p
+			},
+		},
+		{
+			"NYCbCrATransparent",
+			func(r image.Rectangle) image.Image {
+				p := image.NewNYCbCrA(r, image.YCbCrSubsampleRatio444)
+				set := newSimpleSetFunc(p)
+				set(r.Min.X, r.Min.Y, color.NRGBA64{0xffff, 0xffff, 0xffff, 0x0000})
+				return p
+			},
+		},
+		{
+			"NYCbCrATranslucent",
+			func(r image.Rectangle) image.Image {
+				p := image.NewNYCbCrA(r, image.YCbCrSubsampleRatio444)
+				set := newSimpleSetFunc(p)
+				set(r.Min.X, r.Min.Y, color.NRGBA64{0xffff, 0xffff, 0xffff, 0x8000})
+				return p
+			},
+		},
+		{
 			"CMYK",
 			func(r image.Rectangle) image.Image {
 				return image.NewCMYK(r)
