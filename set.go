@@ -112,7 +112,7 @@ func newSetFuncAlpha16(p *image.Alpha16) SetFunc {
 func newSetFuncGray(p *image.Gray) SetFunc {
 	return func(x, y int, r, g, b, a uint32) {
 		i := (y-p.Rect.Min.Y)*p.Stride + (x-p.Rect.Min.X)*1
-		p.Pix[i] = uint8(((299*r + 587*g + 114*b + 500) / 1000) >> 8)
+		p.Pix[i] = uint8((19595*r + 38470*g + 7471*b + 1<<15) >> 24)
 	}
 }
 
@@ -120,7 +120,7 @@ func newSetFuncGray16(p *image.Gray16) SetFunc {
 	return func(x, y int, r, g, b, a uint32) {
 		i := (y-p.Rect.Min.Y)*p.Stride + (x-p.Rect.Min.X)*2
 		s := p.Pix[i : i+2]
-		y16 := uint16((299*r + 587*g + 114*b + 500) / 1000)
+		y16 := uint16((19595*r + 38470*g + 7471*b + 1<<15) >> 16)
 		s[0] = uint8(y16 >> 8)
 		s[1] = uint8(y16)
 	}
