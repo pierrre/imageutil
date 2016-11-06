@@ -6,6 +6,10 @@ go:
   - 1.7.3
   - tip
 
+matrix:
+  allow_failures:
+    - go: tip
+
 install: go get -v -d -t
 
 script:
