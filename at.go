@@ -185,9 +185,27 @@ func newAtFuncYCbCr(p *image.YCbCr) AtFunc {
 		yy1 := int32(p.Y[yi]) * 0x10100
 		cb1 := int32(p.Cb[ci]) - 128
 		cr1 := int32(p.Cr[ci]) - 128
-		r = uint32(clampInt32((yy1 + 91881*cr1) >> 8))
-		g = uint32(clampInt32((yy1 - 22554*cb1 - 46802*cr1) >> 8))
-		b = uint32(clampInt32((yy1 + 116130*cb1) >> 8))
+		r1 := yy1 + 91881*cr1
+		if uint32(r1)&0xff000000 == 0 {
+			r1 >>= 8
+		} else {
+			r1 = ^(r1 >> 31) & 0xffff
+		}
+		r = uint32(r1)
+		g1 := yy1 - 22554*cb1 - 46802*cr1
+		if uint32(g1)&0xff000000 == 0 {
+			g1 >>= 8
+		} else {
+			g1 = ^(g1 >> 31) & 0xffff
+		}
+		g = uint32(g1)
+		b1 := yy1 + 116130*cb1
+		if uint32(b1)&0xff000000 == 0 {
+			b1 >>= 8
+		} else {
+			b1 = ^(b1 >> 31) & 0xffff
+		}
+		b = uint32(b1)
 		a = 0xffff
 		return
 	}
@@ -219,9 +237,27 @@ func newAtFuncNYCbCrA(p *image.NYCbCrA) AtFunc {
 		yy1 := int32(p.Y[yi]) * 0x10100
 		cb1 := int32(p.Cb[ci]) - 128
 		cr1 := int32(p.Cr[ci]) - 128
-		r = uint32(clampInt32((yy1 + 91881*cr1) >> 8))
-		g = uint32(clampInt32((yy1 - 22554*cb1 - 46802*cr1) >> 8))
-		b = uint32(clampInt32((yy1 + 116130*cb1) >> 8))
+		r1 := yy1 + 91881*cr1
+		if uint32(r1)&0xff000000 == 0 {
+			r1 >>= 8
+		} else {
+			r1 = ^(r1 >> 31) & 0xffff
+		}
+		r = uint32(r1)
+		g1 := yy1 - 22554*cb1 - 46802*cr1
+		if uint32(g1)&0xff000000 == 0 {
+			g1 >>= 8
+		} else {
+			g1 = ^(g1 >> 31) & 0xffff
+		}
+		g = uint32(g1)
+		b1 := yy1 + 116130*cb1
+		if uint32(b1)&0xff000000 == 0 {
+			b1 >>= 8
+		} else {
+			b1 = ^(b1 >> 31) & 0xffff
+		}
+		b = uint32(b1)
 		if a == 0xffff {
 			return
 		}
@@ -230,16 +266,6 @@ func newAtFuncNYCbCrA(p *image.NYCbCrA) AtFunc {
 		b = b * a / 0xffff
 		return
 	}
-}
-
-func clampInt32(v int32) int32 {
-	if v < 0 {
-		return 0
-	}
-	if v > 0xffff {
-		return 0xffff
-	}
-	return v
 }
 
 func newAtFuncCMYK(p *image.CMYK) AtFunc {
