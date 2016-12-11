@@ -12,12 +12,7 @@ matrix:
 
 install: go get -v -d -t
 
-script:
-  - go test -v -cover -coverprofile=coverage.txt -covermode=atomic
-  - >
-    go get -v github.com/alecthomas/gometalinter &&
-    gometalinter --install &&
-    gometalinter -E gofmt -D gotype -D vetshadow -D dupl -D goconst -D interfacer -D gocyclo -D gas --tests --deadline=10m
+script: make
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash) -f build/coverage.txt
