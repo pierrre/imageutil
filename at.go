@@ -184,7 +184,7 @@ func newAtFuncYCbCr(p *image.YCbCr) AtFunc {
 		default:
 			ci = (y-p.Rect.Min.Y)*p.CStride + (x - p.Rect.Min.X)
 		}
-		yy1 := int32(p.Y[yi]) * 0x10100
+		yy1 := int32(p.Y[yi]) * 0x10101
 		cb1 := int32(p.Cb[ci]) - 128
 		cr1 := int32(p.Cr[ci]) - 128
 		r1 := yy1 + 91881*cr1
@@ -237,7 +237,7 @@ func newAtFuncNYCbCrA(p *image.NYCbCrA) AtFunc {
 		default:
 			ci = (y-p.Rect.Min.Y)*p.CStride + (x - p.Rect.Min.X)
 		}
-		yy1 := int32(p.Y[yi]) * 0x10100
+		yy1 := int32(p.Y[yi]) * 0x10101
 		cb1 := int32(p.Cb[ci]) - 128
 		cr1 := int32(p.Cr[ci]) - 128
 		r1 := yy1 + 91881*cr1
