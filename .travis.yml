@@ -15,6 +15,3 @@ matrix:
 install: go get -v -d -t
 
 script: make
-
-after_success:
-  - bash <(curl -s https://codecov.io/bash) -f build/coverage.txt

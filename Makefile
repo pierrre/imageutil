@@ -1,9 +1,7 @@
 all: test lint
 
 test:
-	mkdir -p build
-	go test -v -cover -coverprofile=build/coverage.txt
-	go tool cover -html=build/coverage.txt -o=build/coverage.html
+	go test -v
 
 lint:
 	go get -v -u github.com/alecthomas/gometalinter
