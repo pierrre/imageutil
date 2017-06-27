@@ -1,13 +1,15 @@
-language: go
-
+dist: trusty
 sudo: false
 
+language: go
 go:
-  - 1.8
+  - 1.8.3
+  - 1.9beta2
   - tip
 
 matrix:
   allow_failures:
+    - go: 1.9beta2
     - go: tip
 
 install: go get -v -d -t
