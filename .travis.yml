@@ -3,14 +3,17 @@ sudo: false
 
 language: go
 go:
-  - 1.8.3
-  - 1.9beta2
+  - 1.8.x
+  - 1.9rc1
   - tip
 
 matrix:
   allow_failures:
-    - go: 1.9beta2
+    - go: 1.9rc1
     - go: tip
+
+before_install:
+  - export GOROOT=$(go env GOROOT) # see https://github.com/travis-ci/travis-ci/issues/8177
 
 install: go get -v -d -t
 
