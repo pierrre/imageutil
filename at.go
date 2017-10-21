@@ -6,6 +6,8 @@ import "image"
 type AtFunc func(x, y int) (r, g, b, a uint32)
 
 // NewAtFunc returns an AtFunc for an Image.
+//
+// nolint: gocyclo
 func NewAtFunc(p image.Image) AtFunc {
 	switch p := p.(type) {
 	case *image.RGBA:
@@ -211,6 +213,7 @@ func newAtFuncYCbCr(p *image.YCbCr) AtFunc {
 	}
 }
 
+// nolint: gocyclo
 func newAtFuncNYCbCrA(p *image.NYCbCrA) AtFunc {
 	return func(x, y int) (r, g, b, a uint32) {
 		ai := (y-p.Rect.Min.Y)*p.AStride + (x - p.Rect.Min.X)

@@ -10,6 +10,8 @@ import (
 type SetFunc func(x, y int, r, g, b, a uint32)
 
 // NewSetFunc returns a SetFunc for an Image.
+//
+// nolint: gocyclo
 func NewSetFunc(p draw.Image) SetFunc {
 	switch p := p.(type) {
 	case *image.RGBA:
